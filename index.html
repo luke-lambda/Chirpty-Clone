@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <title>Chirpty</title>
+</head>
+<body>
+    <div class="container">
+        <div id="root">
+            <div class="text-center align-items-center d-flex justify-content-center fh flex-column">
+                <h1 class="mt-4">Chirpty</h1>
+                <p>Create your own Twitter interaction circle</p>
+            
+                <user-generate class="mb-4"></user-generate>
+                <div v-show="is_visible">
+                    <flash-alert>{{ countTimer }}</flash-alert>
+                </div>
+                
+                <br>
+                <a href="#" class="btn btn-lg btn-primary">Skip the wait for a <u>cup of coffee</u></a>
+                <div class="flex-fill"></div>
+                <div class="text-center pb-5 mt-5">
+                    <a href="https://twitter.com/devInString" class="mr-4"><u>@devInString</u></a>
+                    <a href="#" class="mr-4"><u>Link_1</u></a>
+                    <a href="#" class="mr-4"><u>Link_2</u></a>
+                    <a href="#"><u>Link_3</u></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template id="user-input">
+        <form>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                </div>
+                <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <button class="btn btn-primary btn-lg btn-block disabled" type="submit" disabled="">Generate</button>
+        </form>
+    </template>
+
+    <template id="flash-message">
+        <div class="alert alert-warning font-weight-bold">
+            <p>No more slots available right now!</p>
+            <p>More become available every <slot></slot> seconds!</p>
+        </div>
+    </template>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        Vue.component('user-generate', {
+            template: '#user-input',
+        });
+
+        Vue.component('flash-alert', {
+            props: ['count_timer'],
+            template: '#flash-message',
+        });
+
+        let app = new Vue({
+            el: "#root",
+            data: {
+                test: "Teste",
+                is_visible: true,
+                countTimer: 15,
+            },
+            
+            created() {
+                setInterval(() => this.countTimer -= 1 , 1000);
+                setTimeout(() => this.is_visible = false, this.countTimer * 1000);
+            }
+        });
+    </script>
+</body>
+</html>
